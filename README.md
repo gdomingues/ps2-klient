@@ -23,7 +23,8 @@ I have been using IntelliJ IDEA Community 2017.3 with both [TornadoFX](https://g
 
 # **Requirements**
 
-The only requirement is having [Java 8 JRE installed.](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)
+The requirement for running the program is having [Java 8 JRE installed.](http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)
+If you want to build the project, it's necessary to have [Java 8 JDK installed.](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 
 # **Screenshots**
 
