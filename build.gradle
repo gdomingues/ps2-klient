@@ -41,9 +41,11 @@ compileTestKotlin {
 }
 
 jfx {
-    updateExistingJar = true
-    verbose = true
     mainClass = 'com.germanno.app.Ps2Klient'
     vendor = 'GermannoDomingues'
-    jfxMainAppJarName = "ps2-klient.jar"
+
+    ext.projectName = "ps2-klient-${rootProject.version}"
+
+    jfxAppOutputDir = "build/jfx/${ext.projectName}"
+    jfxMainAppJarName = "${ext.projectName}.jar"
 }
