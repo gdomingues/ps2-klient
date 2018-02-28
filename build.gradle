@@ -12,7 +12,7 @@ buildscript {
 }
 
 group 'germanno'
-version '0.1-SNAPSHOT'
+version '0.2-SNAPSHOT'
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
@@ -27,7 +27,6 @@ repositories {
 
 dependencies {
     compile 'no.tornado:tornadofx:1.7.14'
-    compile 'net.harawata:appdirs:1.0.1'
     compile 'com.github.salomonbrys.kodein:kodein:4.1.0'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     testCompile group: 'junit', name: 'junit', version: '4.12'

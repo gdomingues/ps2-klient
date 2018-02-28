@@ -48,20 +48,21 @@ class MainController : Controller() {
         DirectoryChooser()
                 .apply { title = "Select a folder" }
                 .showDialog(window)
-                ?.let { newFile ->
-                    files.add(newFile.canonicalPath)
-                    environmentManager.shareFile(newFile)
-                }
+                .handleDialogReturn()
     }
 
     fun addFileClicked(window: Window?) {
         FileChooser()
                 .apply { title = "Select a file" }
                 .showOpenDialog(window)
-                ?.let { newFile ->
-                    files.add(newFile.absolutePath)
-                    environmentManager.shareFile(newFile)
-                }
+                .handleDialogReturn()
+    }
+
+    private fun File?.handleDialogReturn() {
+        this?.let { newFile ->
+            environmentManager.shareFile(newFile)
+            updateFileList()
+        }
     }
 
     fun deleteFileClicked(it: KeyEvent) {
@@ -70,11 +71,18 @@ class MainController : Controller() {
                 @Suppress("UNCHECKED_CAST")
                 with(it.source as ListView<String>) {
                     environmentManager.unshareFile(File(selectedItem))
-                    files.remove(selectedItem)
+                    updateFileList()
                 }
             }
             else                               -> {
             }
+        }
+    }
+
+    private fun updateFileList() {
+        files.apply {
+            clear()
+            addAll(environmentManager.listSharedFiles().map { it.canonicalPath })
         }
     }
 

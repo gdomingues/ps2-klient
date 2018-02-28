@@ -5,7 +5,6 @@ import com.germanno.client.interactors.LinuxInteractor
 import com.germanno.client.interactors.MacOsInteractor
 import com.germanno.client.interactors.WindowsInteractor
 import com.sun.javafx.PlatformUtil
-import net.harawata.appdirs.AppDirsFactory
 import tornadofx.*
 import java.io.File
 import java.io.FileOutputStream
@@ -27,18 +26,23 @@ class EnvironmentManager {
                 else                     -> throw IllegalStateException("Operating System is not supported")
             }
 
-    private val appDataDir by lazy {
-        File(AppDirsFactory.getInstance().getUserDataDir("PS2 Klient", null, "GermannoDomingues"))
+    private val workingDir by lazy {
+        File(System.getProperty("java.io.tmpdir"), "PS2Klient")
                 .apply { if (!exists()) mkdirs() }
     }
 
+    private val preferencesFile by lazy {
+        File("ps2-klient.ini")
+                .apply { if (!exists()) createNewFile() }
+    }
+
     private val sharedFilesDir by lazy {
-        appDataDir.resolve("sharedFiles")
+        workingDir.resolve("sharedFiles")
                 .apply { if (!exists()) mkdirs() }
     }
 
     private val binaryFile by lazy {
-        appDataDir.resolve(interactor.fileName)
+        workingDir.resolve(interactor.fileName)
     }
 
     private val runningProcesses = mutableSetOf<Process>()
@@ -88,15 +92,40 @@ class EnvironmentManager {
     }
 
     fun shareFile(newSharedFile: File) {
+        getPreferences()
+                .apply { add(newSharedFile.absolutePath) }
+                .saveToPreferences()
+
         interactor.addFile(sharedFilesDir, newSharedFile)
     }
 
     fun unshareFile(fileToRemove: File) {
+        getPreferences()
+                .apply { remove(fileToRemove.absolutePath) }
+                .saveToPreferences()
+
         interactor.removeFile(sharedFilesDir, fileToRemove)
     }
 
     fun listSharedFiles(): List<File> {
+        getPreferences()
+                .forEach { interactor.addFile(sharedFilesDir, File(it)) }
+
         return interactor.listSharedFiles(sharedFilesDir)
+    }
+
+    private fun getPreferences(): MutableList<String> {
+        return preferencesFile
+                .readLines()
+                .toMutableList()
+    }
+
+    private fun MutableList<String>.saveToPreferences() {
+        preferencesFile
+                .writeText(
+                        toMutableSet()
+                                .joinToString(System.lineSeparator())
+                )
     }
 
     fun checkConnection(hostAddress: InetAddress): Boolean {
