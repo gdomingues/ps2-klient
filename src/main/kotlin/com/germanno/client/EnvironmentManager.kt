@@ -5,7 +5,6 @@ import com.germanno.client.interactors.LinuxInteractor
 import com.germanno.client.interactors.MacOsInteractor
 import com.germanno.client.interactors.WindowsInteractor
 import com.sun.javafx.PlatformUtil
-import net.harawata.appdirs.AppDirsFactory
 import tornadofx.*
 import java.io.File
 import java.io.FileOutputStream
@@ -27,18 +26,18 @@ class EnvironmentManager {
                 else                     -> throw IllegalStateException("Operating System is not supported")
             }
 
-    private val appDataDir by lazy {
-        File(AppDirsFactory.getInstance().getUserDataDir("PS2 Klient", null, "GermannoDomingues"))
+    private val workingDir by lazy {
+        File(System.getProperty("java.io.tmpdir"), "PS2Klient")
                 .apply { if (!exists()) mkdirs() }
     }
 
     private val sharedFilesDir by lazy {
-        appDataDir.resolve("sharedFiles")
+        workingDir.resolve("sharedFiles")
                 .apply { if (!exists()) mkdirs() }
     }
 
     private val binaryFile by lazy {
-        appDataDir.resolve(interactor.fileName)
+        workingDir.resolve(interactor.fileName)
     }
 
     private val runningProcesses = mutableSetOf<Process>()
