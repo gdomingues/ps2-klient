@@ -31,6 +31,11 @@ class EnvironmentManager {
                 .apply { if (!exists()) mkdirs() }
     }
 
+    private val preferencesFile by lazy {
+        File("ps2-klient.ini")
+                .apply { if (!exists()) createNewFile() }
+    }
+
     private val sharedFilesDir by lazy {
         workingDir.resolve("sharedFiles")
                 .apply { if (!exists()) mkdirs() }
@@ -87,15 +92,40 @@ class EnvironmentManager {
     }
 
     fun shareFile(newSharedFile: File) {
+        getPreferences()
+                .apply { add(newSharedFile.absolutePath) }
+                .saveToPreferences()
+
         interactor.addFile(sharedFilesDir, newSharedFile)
     }
 
     fun unshareFile(fileToRemove: File) {
+        getPreferences()
+                .apply { remove(fileToRemove.absolutePath) }
+                .saveToPreferences()
+
         interactor.removeFile(sharedFilesDir, fileToRemove)
     }
 
     fun listSharedFiles(): List<File> {
+        getPreferences()
+                .forEach { interactor.addFile(sharedFilesDir, File(it)) }
+
         return interactor.listSharedFiles(sharedFilesDir)
+    }
+
+    private fun getPreferences(): MutableList<String> {
+        return preferencesFile
+                .readLines()
+                .toMutableList()
+    }
+
+    private fun MutableList<String>.saveToPreferences() {
+        preferencesFile
+                .writeText(
+                        toMutableSet()
+                                .joinToString(System.lineSeparator())
+                )
     }
 
     fun checkConnection(hostAddress: InetAddress): Boolean {
