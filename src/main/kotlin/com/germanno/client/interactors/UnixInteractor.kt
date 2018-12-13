@@ -42,7 +42,12 @@ abstract class UnixInteractor : ClientInteractor {
     }
 
     override fun listSharedFiles(workingDir: File): List<File> {
-        return workingDir.listFiles().toList()
+        return workingDir
+                .listFiles()
+                .filter { file ->
+                    file.exists()
+                            .also { exists -> if (!exists) file.delete() }
+                }
     }
 
     override fun checkConnection(hostAddress: InetAddress): Boolean {
