@@ -2,10 +2,10 @@ package com.germanno.app
 
 import com.germanno.client.EnvironmentManager
 import com.germanno.view.MainView
-import com.github.salomonbrys.kodein.Kodein
-import com.github.salomonbrys.kodein.bind
-import com.github.salomonbrys.kodein.instance
-import com.github.salomonbrys.kodein.singleton
+import org.kodein.di.Kodein
+import org.kodein.di.generic.bind
+import org.kodein.di.generic.instance
+import org.kodein.di.generic.singleton
 import tornadofx.*
 import kotlin.reflect.KClass
 

@@ -30,7 +30,7 @@ import java.net.UnknownHostException
  */
 class MainController : Controller() {
 
-    private val environmentManager: EnvironmentManager = kodein()
+    private val environmentManager: EnvironmentManager by kodein()
 
     private var connectivityMonitorTask: Task<Boolean>? = null
     private var startMonitoringDelayedTask: FXTimerTask? = null
