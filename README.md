@@ -19,7 +19,7 @@ I would like to rewrite the PS2Client in Kotlin following the protocol specifica
 
 # **Coding**
 
-I have been using IntelliJ IDEA Community 2017.3 with both [TornadoFX](https://github.com/edvin/tornadofx) and Kotlin plugins installed.
+I have been using IntelliJ IDEA Community 2018.2.6 with both [TornadoFX](https://github.com/edvin/tornadofx) and Kotlin plugins installed.
 
 # **Requirements**
 
