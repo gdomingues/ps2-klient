@@ -65,6 +65,10 @@ class WindowsInteractor : ClientInteractor {
         return getFileList(workingDir)
                 .readLines(charset)
                 .map { File(it) }
+                .filter { file ->
+                    file.exists()
+                            .also { exists -> if (!exists) file.delete() }
+                }
     }
 
     override fun checkConnection(hostAddress: InetAddress): Boolean {
